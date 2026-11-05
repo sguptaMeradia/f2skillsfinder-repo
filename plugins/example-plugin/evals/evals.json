@@ -1,0 +1,20 @@
+{
+  "skill": "example-skill",
+  "notes": "Test cases for the skill. Each case is a prompt plus what a passing answer must and must not contain. Feed these to whichever runner the team uses (claude plugin eval, the skill-creator skill, or f2-evaluator). Add a case for every bug you fix so it cannot come back.",
+  "cases": [
+    {
+      "id": "basic-recap",
+      "prompt": "Recap these notes: Agreed to move launch to March 3. Priya to send the revised plan by Friday. Still unsure who owns vendor contract review.",
+      "must_include": ["March 3", "Priya", "Friday"],
+      "must_not_include": [],
+      "rubric": "Decision listed once. Action owner is Priya. Vendor contract review appears as an open question or with 'Owner: not stated', never with an invented owner."
+    },
+    {
+      "id": "no-owner-named",
+      "prompt": "Recap: Someone needs to update the pricing sheet before the board meeting on 12 Dec.",
+      "must_include": ["12 Dec", "not stated"],
+      "must_not_include": [],
+      "rubric": "Does not invent an owner for the pricing sheet update."
+    }
+  ]
+}

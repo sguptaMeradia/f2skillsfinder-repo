@@ -1,0 +1,16 @@
+{
+  "name": "f2-skills",
+  "owner": {
+    "name": "F2 Strategy Skills Team"
+  },
+  "metadata": {
+    "description": "F2 Strategy's internal Claude skills, packaged as plugins. Source of truth for every skill that reaches users."
+  },
+  "plugins": [
+    {
+      "name": "example-plugin",
+      "source": "./plugins/example-plugin",
+      "description": "Template plugin showing the folder layout, a skill, evals and a changelog. Copy it to start a new plugin."
+    }
+  ]
+}

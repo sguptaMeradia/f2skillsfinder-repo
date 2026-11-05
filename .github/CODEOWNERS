@@ -1,0 +1,16 @@
+# Who must approve changes. GitHub requests these reviewers automatically,
+# and with branch protection ("Require review from Code Owners") a PR cannot
+# merge without them. Later lines win over earlier ones.
+#
+# TODO: replace the placeholder team and user names with real GitHub handles.
+
+# Default: the skills platform team reviews everything.
+*                                   @your-org/skills-platform
+
+# Repo plumbing: CI, release, validation rules, marketplace manifest.
+/.github/                           @your-org/skills-platform
+/scripts/                           @your-org/skills-platform
+/.claude-plugin/                    @your-org/skills-platform
+
+# One line per plugin: its named owner(s).
+/plugins/example-plugin/            @your-github-handle @your-org/skills-platform

@@ -1,0 +1,46 @@
+name: Validate skills
+
+on:
+  pull_request:
+    branches: [main, staging]
+  push:
+    branches: [main, staging]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so the version-bump check can diff against the base branch
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Structure, frontmatter, changelog, evals, sensitive-data scan
+        if: github.event_name == 'push'
+        run: python scripts/validate.py
+
+      - name: Same checks plus version bump against the target branch
+        if: github.event_name == 'pull_request'
+        run: python scripts/validate.py --base origin/${{ github.base_ref }}
+
+  # Behavior tests. Uncomment and adapt once the team picks an eval runner
+  # (claude plugin eval, the skill-creator skill, or f2-evaluator).
+  # Store the API key as a repository secret, never in the repo.
+  #
+  # evals:
+  #   needs: validate
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Run skill evals
+  #       env:
+  #         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  #       run: echo "TODO: run evals in plugins/*/evals/evals.json with the chosen runner"

@@ -1,0 +1,8 @@
+{
+  "name": "example-plugin",
+  "description": "Template plugin showing the folder layout, a skill, evals and a changelog. Copy it to start a new plugin.",
+  "version": "0.1.0",
+  "author": {
+    "name": "F2 Strategy Skills Team"
+  }
+}

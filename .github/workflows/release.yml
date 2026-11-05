@@ -1,0 +1,49 @@
+name: Release
+
+# On every push to main, tag and publish a GitHub Release for any plugin
+# whose version has no tag yet. Tag format: <plugin-name>-v<version>
+# The release notes are that version's section of the plugin's CHANGELOG.md.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag and release new plugin versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for source in $(jq -r '.plugins[].source' .claude-plugin/marketplace.json); do
+            manifest="$source/.claude-plugin/plugin.json"
+            name=$(jq -r '.name' "$manifest")
+            version=$(jq -r '.version' "$manifest")
+            tag="${name}-v${version}"
+
+            if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+              echo "skip  $tag (already released)"
+              continue
+            fi
+
+            # Pull this version's section out of the changelog for the release notes.
+            awk -v v="$version" '
+              $0 ~ "^## \\[" v "\\]" {grab=1; next}
+              grab && /^## \[/ {exit}
+              grab {print}
+            ' "$source/CHANGELOG.md" > notes.md
+
+            git tag "$tag"
+            git push origin "$tag"
+            gh release create "$tag" --title "$name $version" --notes-file notes.md
+            echo "made  $tag"
+          done

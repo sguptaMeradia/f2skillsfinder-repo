@@ -1,0 +1,11 @@
+{
+  "extraKnownMarketplaces": {
+    "f2-skills": {
+      "source": { "source": "github", "repo": "your-org/f2-skills" },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "example-plugin@f2-skills": true
+  }
+}
